@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Product")
+@Table(name="Type")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +19,10 @@ public class Type {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="Id")
     private Integer id;
+
     @Column(name="Name")
     private String name;
+
     @OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
     private List<Product> prodcts;
 }

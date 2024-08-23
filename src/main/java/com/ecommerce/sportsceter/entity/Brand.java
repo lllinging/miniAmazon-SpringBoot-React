@@ -1,5 +1,7 @@
 package com.ecommerce.sportsceter.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,4 +22,7 @@ public class Brand {
 
     @Column(name = "Name")
     private String name;
+
+    @OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
+    private List<Product> prodcts;
 }
