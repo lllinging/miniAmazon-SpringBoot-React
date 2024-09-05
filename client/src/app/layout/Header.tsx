@@ -3,16 +3,17 @@ import { AppBar, Badge, Box, IconButton, List, ListItem, Switch, Toolbar, Typogr
 import { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "../store/configureStore";
+import SignedInMenu from "./SignedInMenu";
 
 const navLinks = [
-    {title: "Home", path: "/"},
-    {title: "store", path: "/store"},
-    {title: "Contact", path: "/contact"}
+    { title: "Home", path: "/" },
+    { title: "store", path: "/store" },
+    { title: "Contact", path: "/contact" }
 ];
 
 const accountLinks = [
-    {title: "Login", path: "/login"},
-    {title: "Register", path: "/register"}
+    { title: "Login", path: "/login" },
+    { title: "Register", path: "/register" }
 ];
 
 const navStyles = {
@@ -32,8 +33,9 @@ interface Props {
     handleThemeChange: () => void;
 }
 
-export default function Header({darkMode, handleThemeChange}: Props) {
-    const {basket} = useAppSelector((state) => state.basket);
+export default function Header({ darkMode, handleThemeChange }: Props) {
+    const { basket } = useAppSelector((state) => state.basket);
+    const { user } = useAppSelector((state) => state.account);
     console.log("Basket:", basket);
     useEffect(() => {
         console.log("Basket items:", basket?.items);
@@ -42,8 +44,8 @@ export default function Header({darkMode, handleThemeChange}: Props) {
     const itemCount = basket?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
     return (
-        <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
-            <Toolbar sx = {{
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <Toolbar sx={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center"
@@ -52,28 +54,32 @@ export default function Header({darkMode, handleThemeChange}: Props) {
                     <Typography variant="h6">
                         Sports Center
                     </Typography>
-                    <Switch checked={darkMode} onChange={handleThemeChange} /> 
+                    <Switch checked={darkMode} onChange={handleThemeChange} />
                 </Box>
-                <List sx={{display: "flex"}}>
-                    {navLinks.map(({title, path}) => (
-                        <ListItem component= {NavLink} to= {path} key={path} sx= {navStyles}>
+                <List sx={{ display: "flex" }}>
+                    {navLinks.map(({ title, path }) => (
+                        <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
                             {title}
                         </ListItem>
                     ))}
                 </List>
                 <Box display="flex" alignItems="center">
-                    <IconButton component={Link} to='/basket' size="large" edge="start" color="inherit" sx={{mr:2}}>
+                    <IconButton component={Link} to='/basket' size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
                         <Badge badgeContent={itemCount} color="secondary">
                             <ShoppingCart />
                         </Badge>
                     </IconButton>
-                    <List sx={{display: "flex"}}>
-                        {accountLinks.map(({title, path}) => (
-                            <ListItem component= {NavLink} to= {path} key={path} sx= {navStyles}>
-                                {title}
-                            </ListItem>
-                        ))}
-                    </List>
+                    {user ?
+                        <SignedInMenu /> :
+                        <List sx={{ display: "flex" }}>
+                            {accountLinks.map(({ title, path }) => (
+                                <ListItem component={NavLink} to={path} key={path} sx={navStyles}>
+                                    {title}
+                                </ListItem>
+                            ))}
+                        </List>
+                    }
+
                 </Box>
             </Toolbar>
         </AppBar>

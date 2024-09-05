@@ -27,9 +27,6 @@ public class BasketController {
     public List<BasketResponse> getAllBaskets() {
         return basketService.getAllBaskets();
     }
-    // public ResponseEntity<BasketResponse> getBasket(@RequestParam String id) {
-    //     return ResponseEntity.ok(basketService.getBasket(id));
-    // }
     
     @GetMapping("/{basketId}")
     public BasketResponse getBasketById(@PathVariable String basketId){
