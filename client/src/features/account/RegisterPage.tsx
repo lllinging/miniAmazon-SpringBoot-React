@@ -1,9 +1,13 @@
 import { Container, CssBaseline, Box, Avatar, Typography, TextField, FormControlLabel, Checkbox, Grid, Button, Link } from "@mui/material";
 import { useState } from "react";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 export default function RegisterPage(){
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -11,12 +15,15 @@ export default function RegisterPage(){
   });
 
   const handleChange = (e: any) =>{
+    console.log("e.target:", e.target);
+    console.log(e.target);
     const {name, value} = e.target;
     setFormData({...formData, [name]: value});
   }
   const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log(formData);
+    navigate(location.state?.from || '/login');
   }
     return (
         <Container component="main" maxWidth="xs">
