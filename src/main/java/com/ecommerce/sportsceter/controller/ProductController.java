@@ -49,7 +49,7 @@ public class ProductController {
     // @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Page<ProductResponse>> getProducts(
         @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "10") int size,
+        @RequestParam(name = "size", defaultValue = "12") int size,
         @RequestParam(name = "keyword", required = false) String keyword,
         @RequestParam(name = "brandId", required = false) Integer brandId,
         @RequestParam(name = "typeId", required = false) Integer typeId,
