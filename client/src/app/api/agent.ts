@@ -130,6 +130,7 @@ const Basket = {
 };
 
 const Account = {
+    register: (values: any) => requests.post('auth/register', values),
     login: (values: any) => requests.post('auth/login', values)
 };
 

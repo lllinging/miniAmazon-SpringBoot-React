@@ -31,9 +31,13 @@ public class JwtHelper {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public String generateToken(UserDetails userDetails) {
+    // public String generateToken(UserDetails userDetails) {
+    //     Map<String, Object> claims = new HashMap<>();
+    //     return generateToken(claims, userDetails.getUsername());
+    // }
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        return generateToken(claims, userDetails.getUsername());
+        return generateToken(claims, username);
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

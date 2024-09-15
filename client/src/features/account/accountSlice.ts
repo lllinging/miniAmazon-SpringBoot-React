@@ -15,6 +15,18 @@ const initialState: AccountState = {
     error: null
 }
 
+export const registerUser = createAsyncThunk<User, FieldValues>(
+    'account/register',
+    async (data, thunkAPI) => {
+        try {
+            const user = await agent.Account.register(data);
+            return user;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    }
+)
+
 export const signInUser = createAsyncThunk<User, FieldValues>(
     'account/login',
     async (data, thunkAPI) => {

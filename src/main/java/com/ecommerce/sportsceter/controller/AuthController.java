@@ -19,32 +19,42 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.sportsceter.model.JwtRequest;
 import com.ecommerce.sportsceter.model.JwtResponse;
+import com.ecommerce.sportsceter.model.UserDto;
 import com.ecommerce.sportsceter.security.JwtHelper;
+
+import com.ecommerce.sportsceter.service.UserService;
+import com.ecommerce.sportsceter.service.impl.UserServiceImpl;
+
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/auth")
+@Log4j2
 public class AuthController {
     private final UserDetailsService userDetailsService;
+    private final UserService userService;
+    private final UserServiceImpl userServiceImpl;
     private final AuthenticationManager manager;
     private final JwtHelper jwtHelper;
 
-    public AuthController(UserDetailsService userDetailsService, AuthenticationManager manager, JwtHelper jwtHelper) {
+    public AuthController(UserDetailsService userDetailsService, AuthenticationManager manager, JwtHelper jwtHelper, UserService userService, UserServiceImpl userServiceImpl) {
         this.userDetailsService = userDetailsService;
+        this.userService = userService;
         this.manager = manager;
         this.jwtHelper = jwtHelper;
+        this.userServiceImpl = userServiceImpl;
+    }
+
+    @PostMapping("/register")
+    public String saveUser (@RequestBody UserDto userDto){
+        String id = userService.addUser(userDto);
+        return id;
     }
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request){
-        this.authenticate(request.getUsername(), request.getPassword());
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-        String token = this.jwtHelper.generateToken(userDetails);
-        JwtResponse response = JwtResponse.builder()
-                .username(userDetails.getUsername())
-                .token(token)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return userServiceImpl.loginUser(request);
     }
 
     @GetMapping("/user")
@@ -67,13 +77,4 @@ public class AuthController {
     }
 
 
-    private void authenticate(String username, String password) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-        try{
-            manager.authenticate(authenticationToken);
-        }
-        catch(BadCredentialsException ex){
-            throw new BadCredentialsException("Invalid UserName or Password");
-        }
-    }
 }

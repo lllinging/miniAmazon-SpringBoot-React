@@ -55,7 +55,6 @@ public class ProductController {
         @RequestParam(name = "typeId", required = false) Integer typeId,
         @RequestParam(name = "sort", defaultValue = "name") String sort,
         @RequestParam(name = "order", defaultValue = "asc") String order
-
     ){
         //convert order to Sort direction
         Sort.Direction direction = order.equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
