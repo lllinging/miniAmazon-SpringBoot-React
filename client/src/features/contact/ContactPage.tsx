@@ -13,7 +13,6 @@ export default function ContactPage() {
         height: '100vh',
         textAlign: 'center',
         padding: 3,
-        // backgroundColor: '#f5f5f5', 
       }}
     >
       <Grid container spacing={2} alignItems="center">
