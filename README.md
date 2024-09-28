@@ -43,8 +43,7 @@ Material UI for styling
 ```docker-compose up -d```  
 This will start the MySQL and Redis containers, with data initialization   through mounted volumes.  
 
-2. Build the Project in the src folder:  
-In the project directory, build the application using Maven:  
+2. Build the Project in the src folder:    
 ```mvn clean install```  
 Start the Spring Boot Application  
 
