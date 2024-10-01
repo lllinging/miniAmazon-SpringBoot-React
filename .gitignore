@@ -33,3 +33,8 @@ build/
 .vscode/
 ./Catalog_copy.tsx
 note1.txt
+
+.env
+
+###add application.yaml
+/src/main/resources/application.yaml
