@@ -28,7 +28,7 @@ public class Order {
     private ShippingAddress shippingAddress;
 
     @Column(name="Order_Date")
-    private LocalDateTime orderDate = LocalDateTime.now();
+    private LocalDateTime orderDate;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> orderItems;

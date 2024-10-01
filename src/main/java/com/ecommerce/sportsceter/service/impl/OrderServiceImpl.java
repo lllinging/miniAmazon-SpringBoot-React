@@ -1,5 +1,6 @@
 package com.ecommerce.sportsceter.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -86,6 +87,7 @@ public class OrderServiceImpl implements OrderService{
         Order order = orderMapper.orderResponseToOrder(orderDto);
         order.setOrderItems(orderItems);
         order.setSubTotal(subTotal);
+        order.setOrderDate(LocalDateTime.now());
         //Saving the order 
         Order savedOrder = orderRepository.save(order);
         basketService.deleteBasketById(orderDto.getBasketId());
