@@ -4,7 +4,7 @@ import { useAppSelector } from "../../app/store/configureStore";
 export default function BasketSummary() {
     const {basket} = useAppSelector((state) => state.basket);
     const subTotal = basket?.items.reduce((sum, item) => sum + (item.quantity*item.price), 0) ?? 0;
-    const shipping = 200;
+    const shipping = 10;
 
     //function to format the price with USD currency 
     const formatPrice = (price: number): string => {

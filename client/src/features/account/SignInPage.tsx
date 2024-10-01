@@ -24,8 +24,7 @@ export default function SignInPage() {
       //get the user from the store
       //check if the user is logged in
       const { user } = store.getState().account;
-      console.log('User logged in:', user);
-      console.log('User logged in:', user);
+
       if (user) {
         //navigate it to store page
         navigate(location.state?.from || '/store');  

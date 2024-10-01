@@ -11,12 +11,18 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './app/router/Router.tsx';
 import { store } from './app/store/configureStore.ts';
 import { Provider } from 'react-redux';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe('pk_test_51Q4lg3L52f7XexE5idGhTVqowlA8txNPDBAbyF0aSHPxAu38LF17kC1OYDwE4F2iwyMMLnLFXAzwO5Edp9wIinEU00HnniJDOt');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     {/* <App /> */}
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <Elements stripe={stripePromise}>
+        <RouterProvider router={router} />
+      </Elements>
     </Provider>
   </React.StrictMode>,
 )

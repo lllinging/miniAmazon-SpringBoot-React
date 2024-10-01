@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { SetStateAction, useState, Dispatch } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useAppDispatch } from "../../app/store/configureStore";
 import AddressForm from "./AddressForm";
@@ -13,24 +13,30 @@ import { BasketItem } from "../../app/models/basket";
 import { Paper, Typography, Stepper, Step, StepLabel, Box, Button } from "@mui/material";
 
 const steps = ["Shipping Address", "Review Your Order", "Payment Details"];
-function getStepContent(step: number) {
+
+type setActiveStepType = Dispatch<SetStateAction<number>>;
+
+function getStepContent(step: number, total: number, setActiveStep: setActiveStepType) {
     switch (step) {
         case 0:
-            return <AddressForm />;
+            return <AddressForm />
         case 1:
-            return <Review />;
+            return <Review />
         case 2:
-            return <PaymentForm />;
+            return <PaymentForm total={total} setActiveStep={setActiveStep} />
         default:
-            throw new Error("Unknown step");
+            throw new Error("Unknown step")
     }
 }
 
 export default function CheckoutPage() {
-    const [activeStep, setActiveStep] = useState(0);
+    const [activeStep, setActiveStep] = useState<number>(0);
     const [orderNumber, setOrderNumber] = useState(0);
     const [loading, setLoading] = useState(false);
     const currentValidationRule = ValidationRules[activeStep];
+    const [total, setTotal] = useState(0);
+
+    
 
     const methods = useForm({
         mode: "all",
@@ -44,14 +50,16 @@ export default function CheckoutPage() {
         const isValid = await methods.trigger();
         if (isValid) {
             const data: any = methods.getValues();
-            if (activeStep === steps.length - 1) {
+            if (activeStep === (steps.length - 2)) {
                 //If it's last step then submit the form
                 const basket = await agent.Basket.get();
                 console.log("Basket:", basket);
                 if (basket) {
                     const subTotal = calculateSubTotal(basket.items);
                     //Add logic to calculate delivery fee
-                    const deliveryFee = 200;
+                    const deliveryFee = 10;
+                    setTotal(subTotal + deliveryFee);
+
                     try {
                         setLoading(true);
                         //Construct the order dto to send to backend
@@ -106,6 +114,8 @@ export default function CheckoutPage() {
         return items.reduce((total, item) => total + item.price * item.quantity, 0);
     };
 
+    
+     
     return (
         <FormProvider {...methods}>
             <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -131,20 +141,23 @@ export default function CheckoutPage() {
                         </>
                     ) : (
                         <>
-                            {getStepContent(activeStep)};
+                            {getStepContent(activeStep, total, setActiveStep)}
                             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                                 {activeStep !== 0 && (
                                     <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
                                         Back
                                     </Button>
                                 )}
-                                <Button
-                                    variant="contained"
-                                    onClick={handleNext}
-                                    sx={{ mt: 3, ml: 1 }}
-                                >
-                                    {activeStep === steps.length - 1 ? "Place order" : "Next"}
-                                </Button>
+                                {activeStep !== steps.length - 1 && (
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleNext}
+                                        sx={{ mt: 3, ml: 1 }}
+                                    >
+                                        Next
+                                    </Button>
+                                )}
+                                
                             </Box>
                         </>
                     )}
